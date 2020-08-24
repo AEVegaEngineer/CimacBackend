@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 var bodyParser = require('body-parser')
-
+var conn = require('../connection/Conexion')
 // create application/json parser
 var jsonParser = bodyParser.json()
  
@@ -19,16 +19,12 @@ app.get('/', (req, res) => {
   res.json(saludar)
 })
 
-app.get('/start',(req, res)=>{
-  if(req.query.name === 'Alexis')
-  {
-    console.log("Mandaste parametro de Alexissss")
-  }
-  else {
-    console.log("Otro parametro: "+req.query.name)
-  }
+app.get('/getUsers',(req, res)=>{
+ 
+  // console.log(conn.consultar() )
+  
   res.sendStatus=200,
-  res.json({ username: 'Flavio' })
+  res.json(conn.consultar())
 })
 
 app.post('/startURL', urlencodedParser,jsonParser, function(req, res){
