@@ -3,6 +3,8 @@ const app = express()
 const port = 3000
 var bodyParser = require('body-parser')
 var conn = require('../connection/Conexion')
+
+// PARA CORRER EL SERVIDOR EN MODO TESTING ESCUCHA TIEMPO REAL ESCRIBIR... "npm run dev"
 // create application/json parser
 var jsonParser = bodyParser.json()
  
@@ -12,7 +14,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.get('/', (req, res) => {
   res.send('Hello World!')
   const saludar = {
-    saludo:"hola",
+    saludo:"holaa",
   }
   res.sendStatus='Ok'
   res.statusCode=200
@@ -20,11 +22,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/getUsers',(req, res)=>{
- 
-  // console.log(conn.consultar() )
+ const arr = conn.consultar()
+ console.log(arr)
+  console.log(conn.consultar())
   
-  res.sendStatus=200,
-  res.json(conn.consultar())
+  res.sendStatus=200
+  // res.json(conn.consultar())
+  res.json({"saludo":"hola"})
 })
 
 app.post('/startURL', urlencodedParser,jsonParser, function(req, res){

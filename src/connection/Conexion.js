@@ -10,11 +10,12 @@
   connection.connect();
   connection.query('SELECT user, pass from login_users', function(err, rows, fields) {
       if (err) throw err;
-      console.log('The solution is: ', rows[0]);
+      //  console.log('The solution is: ', rows);
+       return JSON.stringify(rows)
     });
     
     connection.end();
-    // return  rows[0].solution
+    //  return  rows.solution.json()
 }
 
 
