@@ -37,20 +37,29 @@ const rutasProtegidas = express.Router();
 rutasProtegidas.use((req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];    
-    if (token) {
-      jwt.verify(token, app.get('llave'), (err, decoded) => {      
-        if (err) {
-          return res.json({ mensaje: 'Token inválida' });    
-        } else {
-          req.decoded = decoded;    
-          next();
-        }
-      });
-    } else {
-      res.send({ 
-          mensaje: 'Token vacio' 
-      });
+    if(req.headers.authorization.split(" ")[0] === "bearer" || req.headers.authorization.split(" ")[0] === "Bearer")
+    {
+      if (token) {
+        jwt.verify(token, app.get('llave'), (err, decoded) => {      
+          if (err) {
+            return res.json({ mensaje: 'Token inválida' });    
+          } else {
+            req.decoded = decoded;    
+            next();
+          }
+        });
+      } else {
+        res.send({ 
+            mensaje: 'Token vacio' 
+        });
+      }
     }
+    else{
+      res.send({
+        mesanje: 'Error en el Token al tomar el formato bearer'
+      })
+    }
+    
   } catch (error) {
     console.log(error)
     res.send({ 
@@ -62,7 +71,7 @@ rutasProtegidas.use((req, res, next) => {
  });
 
 app.post('/autenticar', (req, res) => {
-    if(req.body.usuario === "asfo" && req.body.contrasena === "holamundo") {
+    if(req.body.user === "asfo" && req.body.password === "holamundo") {
   const payload = {
   check:  true
   };
@@ -89,11 +98,8 @@ app.get('/datos', rutasProtegidas, (req, res) => {
 
  app.get('/getUsers', rutasProtegidas, (req, res)=>{
   
-   const arr = conn.consultar('user,pass','login_users','user = "'+req.body.user+'"')
-   //console.log(arr)
-   // console.log(conn.consultar())
-  //  console.log(arr)
-  console.log(arr)
+   conn.consultar('user,pass','login_users','user = "'+req.query.user+'"')
+
    res.sendStatus=200
    // res.json(conn.consultar())
    

@@ -9,12 +9,20 @@ module.exports = {consultar}
     });
 
   function consultar (campos,tabla,where){
-  connection.connect();
-  connection.query('SELECT '+campos+' from '+tabla+' WHERE '+where, function(err, rows, fields) {
-      if (err) throw err;
+ 
+    try {
+      console.log(where)
+      connection.connect();
+      connection.query('SELECT '+campos+' from '+tabla+' WHERE '+where, function(err, rows, fields) {
       //  console.log('The solution is: ', rows);
+      console.log(JSON.stringify(rows))
        return JSON.stringify(rows)
     });
+    } catch (error) {
+      console.log(error)
+      // return JSON.stringify(error)
+    }
+     
   connection.end();
     //  return  rows.solution.json()
 }
