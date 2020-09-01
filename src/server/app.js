@@ -1,4 +1,5 @@
 const { response } = require('express');
+const { constant } = require('async');
 
 const express = require('express'),
       conn = require('../connection/Conexion'),
@@ -6,7 +7,11 @@ const express = require('express'),
       jwt = require('jsonwebtoken'),
       config = require('../configs/config'),
       app = express();
+      async = require('async');
 // 1
+
+var stackFunctions = []
+
 app.set('llave', config.llave);
 // 2
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,14 +24,14 @@ app.listen(3000,()=>{
 // 5
 app.get('/', function(req, res) {
   const saludar={
-    mensaje:"Hola, bienvenido a la API DE CIMAC. Para consultar por endpoints ponte en contacto con Alexissa41@gmail.com"
+    mensaje:"Hola, bienvenido a la API. Para consultar por endpoints ponte en contacto con Alexissa41@gmail.com"
   }
     res.status=200
     res.send(JSON.stringify( saludar));
 });
 app.post('/', function(req, res) {
   const saludar={
-    mensaje:"Hola, bienvenido a la API DE CIMAC. Para consultar por endpoints ponte en contacto con Alexissa41@gmail.com"
+    mensaje:"Hola, bienvenido a la API. Para consultar por endpoints ponte en contacto con Alexissa41@gmail.com"
   }
     res.status=200
     res.send(JSON.stringify( saludar));
@@ -71,18 +76,28 @@ rutasProtegidas.use((req, res, next) => {
  });
 
 app.post('/autenticar', (req, res) => {
-    if(req.body.user === "asfo" && req.body.password === "holamundo") {
-  const payload = {
-  check:  true
-  };
-  const token = jwt.sign(payload, app.get('llave'));
-  res.json({
-  mensaje: 'Autenticación correcta',
-  token: token
-  });
-    } else {
-        res.json({ mensaje: "Usuario o contraseña incorrectos"})
+  conn.consultar('user,pass','login_users','user = "'+req.body.user+'"AND pass = "'+req.body.pass+'"',function(rows,err){
+    if(err)
+    {
+      console.log(err)
     }
+    if(rows.length)
+    {
+      //error al validar usuario y contraseña
+      res.json({ mensaje: "Usuario o contraseña incorrectos"})
+    }
+    else {
+      const payload = {
+        check:  true
+        };
+      const token = jwt.sign(payload, app.get('llave'));
+      res.json({
+        mensaje: 'Autenticación correcta',
+        token: token
+        })
+    }
+  });
+   
 })
 
 app.get('/datos', rutasProtegidas, (req, res) => {
@@ -97,11 +112,22 @@ app.get('/datos', rutasProtegidas, (req, res) => {
 
 
  app.get('/getUsers', rutasProtegidas, (req, res)=>{
-  
-   conn.consultar('user,pass','login_users','user = "'+req.query.user+'"')
+    // stackFunctions.push(
+    //   conn.consultar('user,pass','login_users','user = "'+req.query.user+'"', callback)
+    // )
+    
+      
+    conn.consultar('user,pass','login_users','user = "'+req.query.user+'"',function(err,rows){
+      if(err)
+      {
+        console.log(err)
+      }
+      if(rows){
+        console.log(rows)
+      }      
+    });
 
    res.sendStatus=200
-   // res.json(conn.consultar())
    
    res.json({"saludo":"hola"})
  })

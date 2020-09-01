@@ -8,22 +8,24 @@ module.exports = {consultar}
       database: 'cimac'
     });
 
-  function consultar (campos,tabla,where){
+  function consultar (campos,tabla,where,callback){
  
-    try {
-      console.log(where)
-      connection.connect();
+      // console.log(where)
+      // connection.connect();
       connection.query('SELECT '+campos+' from '+tabla+' WHERE '+where, function(err, rows, fields) {
-      //  console.log('The solution is: ', rows);
-      console.log(JSON.stringify(rows))
-       return JSON.stringify(rows)
+
+        if(err){
+          return callback(JSON.stringify(err))
+        }
+        if(rows){
+          return callback(JSON.stringify(rows))
+        }
     });
-    } catch (error) {
-      console.log(error)
+  
       // return JSON.stringify(error)
-    }
+    
      
-  connection.end();
+  // connection.end();
     //  return  rows.solution.json()
 }
 function Update (){
