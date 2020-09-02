@@ -9,7 +9,8 @@ module.exports = {consultar}
     });
 
   function consultar (campos,tabla,where,callback){
- 
+    // console.log(campos)
+    // console.log(where)
       // console.log(where)
       // connection.connect();
       connection.query('SELECT '+campos+' from '+tabla+' WHERE '+where, function(err, rows, fields) {

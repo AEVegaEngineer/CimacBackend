@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { constant } = require('async');
+// const { constant } = require('async');
 
 const express = require('express'),
       conn = require('../connection/Conexion'),
@@ -7,7 +7,7 @@ const express = require('express'),
       jwt = require('jsonwebtoken'),
       config = require('../configs/config'),
       app = express();
-      async = require('async');
+      // async = require('async');
 // 1
 
 var stackFunctions = []
@@ -76,17 +76,21 @@ rutasProtegidas.use((req, res, next) => {
  });
 
 app.post('/autenticar', (req, res) => {
-  conn.consultar('user,pass','login_users','user = "'+req.body.user+'"AND pass = "'+req.body.pass+'"',function(rows,err){
+  console.log(req.body.user)
+  console.log(req.body.pass)
+  conn.consultar('user,pass','login_users','user = "'+req.body.user+'" AND pass = "'+req.body.pass+'"',function(rows,err){
     if(err)
     {
       console.log(err)
     }
-    if(rows.length)
+    if(!(rows !== '[]'))
     {
+      console.log(rows)
       //error al validar usuario y contraseña
       res.json({ mensaje: "Usuario o contraseña incorrectos"})
     }
     else {
+      console.log(rows)
       const payload = {
         check:  true
         };
@@ -97,7 +101,6 @@ app.post('/autenticar', (req, res) => {
         })
     }
   });
-   
 })
 
 app.get('/datos', rutasProtegidas, (req, res) => {
