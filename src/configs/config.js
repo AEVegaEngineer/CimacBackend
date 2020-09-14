@@ -1,3 +1,3 @@
 module.exports = {
-    llave: "miclaveultrasecreta123"
+    llave: "CIMAC2020apikeyLlave"
 }
