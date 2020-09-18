@@ -2,7 +2,7 @@ var conn = require("../../configs/db");
 
 module.exports = (req, res) => {
     conn.consultarWhereClause(
-        "view_tercero.terceroid as id, view_tercero.terceroalias as alias, view_tercero.tercerocuit as cuit_asignado",
+        "view_tercero.terceroid as id, view_tercero.terceroalias as alias",
         " view_tercero",
         "tercerocuit = '11111111113'", //numero asignado por cimac
         function (response, error) {
