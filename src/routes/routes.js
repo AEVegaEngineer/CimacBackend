@@ -1,6 +1,5 @@
 const express = require("express");
 var router = express.Router();
-const app = express();
 const autenticar = require("../routes/autenticar/autenticar");
 const moment = require("moment");
 const obras_sociales = require("../routes/obras_sociales/obras_sociales");
