@@ -1,10 +1,10 @@
-module.exports = { consultar, consultarWhereClause };
+module.exports = { consultar, consultarWhereClause, insertarRegistros };
 //DATOS DE CONEXION
 let mysql = require("mysql");
 let connection = mysql.createConnection({
-  host: "localhost",
+  host: "181.118.74.67",
   user: "root",
-  password: "",
+  password: "DbAlex2020-*a*",
   database: "cimac",
 });
 
@@ -37,6 +37,24 @@ function consultar(campos, tabla, where, callback) {
       }
     }
   );
+}
+function insertarRegistros(campos, tabla, valores, callback) {
+  try {
+    connection.query(
+      "INSERT INTO " + tabla + "(" + campos + ") VALUES (" + valores + ")",
+      function (err, result) {
+        if (result) {
+          return callback({ mensaje: "Se agregó el usuario correctamente" });
+        }
+        if (err) {
+          console.log(err);
+          return callback("Error al agregar el usuario");
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
 function Update() {
   connection.connect();
